@@ -165,7 +165,7 @@ En este caso, debido a que el código era un poco extenso, he preferido separar 
 ```bash
 <odoo>
     <data>
-        <!-- Vistas para Paciente -->
+        <!-- Vistas Paciente Tree -->
         <record id="view_paciente_tree" model="ir.ui.view">
             <field name="name">hospital.paciente.tree</field>
             <field name="model">hospital.paciente</field>
@@ -178,6 +178,7 @@ En este caso, debido a que el código era un poco extenso, he preferido separar 
             </field>
         </record>
 
+        <!-- Vistas Paciente form -->
         <record id="view_paciente_form" model="ir.ui.view">
             <field name="name">hospital.paciente.form</field>
             <field name="model">hospital.paciente</field>
@@ -187,8 +188,6 @@ En este caso, debido a que el código era un poco extenso, he preferido separar 
                         <group>
                             <field name="name"/>
                             <field name="apellidos"/>
-                        </group>
-                        <group>
                             <field name="sintomas"/>
                         </group>
                         <notebook><!-- Esto nos permite mostrar los estudiantes debajo en una pestaña-->
@@ -198,18 +197,10 @@ En este caso, debido a que el código era un poco extenso, he preferido separar 
                                         <field name="medico_id"/>
                                         <field name="diagnostico"/>
                                     </tree>
-                                    <form string="Cita">
-                                        <sheet>
-                                            <group>
-                                                <field name="medico_id"/>
-                                                <field name="diagnostico"/>
-                                            </group>
-                                        </sheet>
-                                    </form>
-                                </field>
-                            </page>
-                        </notebook>
-                    </sheet>
+                            </field>
+                        </page>
+                </notebook>
+                </sheet>
                 </form>
             </field>
         </record>
@@ -249,8 +240,6 @@ En este caso, debido a que el código era un poco extenso, he preferido separar 
                         <group>
                             <field name="name"/>
                             <field name="apellidos"/>
-                        </group>
-                        <group>
                             <field name="numero_colegiado"/>
                         </group>
                         <notebook><!-- Esto nos permite mostrar los estudiantes debajo en una pestaña-->
@@ -260,14 +249,6 @@ En este caso, debido a que el código era un poco extenso, he preferido separar 
                                         <field name="paciente_id"/>
                                         <field name="diagnostico"/>
                                     </tree>
-                                    <form string="Cita">
-                                        <sheet>
-                                            <group>
-                                                <field name="paciente_id"/>
-                                                <field name="diagnostico"/>
-                                            </group>
-                                        </sheet>
-                                    </form>
                                 </field>
                             </page>
                         </notebook>
@@ -275,6 +256,7 @@ En este caso, debido a que el código era un poco extenso, he preferido separar 
                 </form>
             </field>
         </record>
+
     </data>
 </odoo>
 ```
