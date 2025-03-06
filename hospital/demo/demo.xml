@@ -1,0 +1,44 @@
+<odoo>
+    <data>
+    <!-- Datos de ejemplo para Pacientes -->
+    <record id="demo_paciente1" model="hospital.paciente">
+      <field name="name">Mortadelo</field>
+      <field name="apellidos">Mortadelez</field>
+      <field name="sintomas">Cambia de apariencia en un parpadeo</field>
+    </record>
+
+    <record id="demo_paciente2" model="hospital.paciente">
+      <field name="name">Filemon</field>
+      <field name="apellidos">Filemonez</field>
+      <field name="sintomas">Solo le quedan 2 pelos</field>
+    </record>
+
+    <!-- Datos de ejemplo para Médicos -->
+    <record id="demo_medico1" model="hospital.medico">
+      <field name="name">House</field>
+      <field name="apellidos">M.D.</field>
+      <field name="numero_colegiado">10</field>
+    </record>
+
+    <record id="demo_medico2" model="hospital.medico">
+      <field name="name">Vilches</field>
+      <field name="apellidos">Hospital Central</field>
+      <field name="numero_colegiado">6</field>
+    </record>
+
+    <!-- Datos de ejemplo para Citas -->
+    <record id="demo_cita1" model="hospital.citas">
+      <field name="paciente_id" ref="demo_paciente1"/>
+      <field name="medico_id" ref="demo_medico1"/>
+      <field name="diagnostico">Es un mago del disfraz</field>
+    </record>
+    
+    <record id="demo_cita2" model="hospital.citas">
+      <field name="paciente_id" ref="demo_paciente2"/>
+      <field name="medico_id" ref="demo_medico2"/>
+      <field name="diagnostico">Severo caso de calvicie inminente</field>
+    </record>
+
+
+    </data>
+</odoo>
