@@ -96,7 +96,10 @@ Un paciente puede haber sido atendido por varios médicos y un médico puede hab
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-        'views/views.xml',
+        'views/citas.xml',
+        "views/paciente.xml",
+        "views/medico.xml",
+        "views/menu.xml",
         'views/templates.xml',
     ],
     # only loaded in demonstration mode
@@ -110,19 +113,263 @@ Un paciente puede haber sido atendido por varios médicos y un médico puede hab
 <br></br>
 [Volver al inicio](#índice) 
 
-## 4) Model
+## 4) Creamos nuestro Model
+Creamos 3 clases: **Paciente**, **Medico** y **CITAS**
+
+<details><summary>🔍 SPOILER:</summary>  
+    
+```bash
+from odoo import models, fields, api
+
+class Paciente(models.Model):
+    _name = 'hospital.paciente'
+    _description = 'Paciente del hospital'
+
+    name = fields.Char(string='Nombre', required=True)
+    apellidos = fields.Char(string="Apellidos", required=True)
+    sintomas = fields.Text(string='Síntomas')
+    citas_ids = fields.One2many('hospital.citas', 'paciente_id', string='Citas')
+
+class Medico(models.Model):
+    _name = 'hospital.medico'
+    _description = 'Médico del hospital'
+
+    name = fields.Char(string='Nombre', required=True)
+    apellidos = fields.Char(string="Apellidos", required=True)
+    numero_colegiado = fields.Integer(string="Número de Colegiado", required=True)
+    citas_ids = fields.One2many('hospital.citas', 'medico_id', string='Citas')
+
+#Por cada vez que un médico ha atendido a un paciente, tendremos un modelo indicando el diagnóstico.
+#Un paciente puede haber sido atendido por varios médicos y un médico puede haber atendido a varios pacientes.
+
+class Citas(models.Model):
+    _name = 'hospital.citas'
+    _description = 'Cita de atención médica'
+
+    paciente_id = fields.Many2one('hospital.paciente', string='Paciente', required=True)
+    medico_id = fields.Many2one('hospital.medico', string='Médico', required=True)
+    diagnostico = fields.Text(string='Diagnóstico', required=True)
+```
+</details>
+
+<br></br>
+[Volver al inicio](#índice) 
+
+## 5) Creacion de nuestros Views
+En este caso, debido a que el código era un poco extenso, he preferido separar las views en 4 archivos, separando las views de paciente, medico, cita y los menús. Tal y como estaba organizado en el ejemplo proporcionado.
+
+**View Paciente:**
+
+<details><summary>🔍 SPOILER:</summary>  
+
+```bash
+<odoo>
+    <data>
+        <!-- Vistas para Paciente -->
+        <record id="view_paciente_tree" model="ir.ui.view">
+            <field name="name">hospital.paciente.tree</field>
+            <field name="model">hospital.paciente</field>
+            <field name="arch" type="xml">
+                <tree string="Pacientes">
+                    <field name="name"/>
+                    <field name="apellidos"/>
+                    <field name="sintomas"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_paciente_form" model="ir.ui.view">
+            <field name="name">hospital.paciente.form</field>
+            <field name="model">hospital.paciente</field>
+            <field name="arch" type="xml">
+                <form string="Paciente">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="apellidos"/>
+                        </group>
+                        <group>
+                            <field name="sintomas"/>
+                        </group>
+                        <notebook><!-- Esto nos permite mostrar los estudiantes debajo en una pestaña-->
+                            <page string="Citas">
+                                <field name="citas_ids">
+                                    <tree string="Citas">
+                                        <field name="medico_id"/>
+                                        <field name="diagnostico"/>
+                                    </tree>
+                                    <form string="Cita">
+                                        <sheet>
+                                            <group>
+                                                <field name="medico_id"/>
+                                                <field name="diagnostico"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
+```
+
+</details>
+<br></br>
+
+**View Medico:**
+
+<details><summary>🔍 SPOILER:</summary>  
+
+```bash
+<odoo>
+    <data>
+        <!-- Vistas para Medico -->
+        <record id="view_medico_tree" model="ir.ui.view">
+            <field name="name">hospital.medico.tree</field>
+            <field name="model">hospital.medico</field>
+            <field name="arch" type="xml">
+                <tree string="Médicos">
+                    <field name="name"/>
+                    <field name="apellidos"/>
+                    <field name="numero_colegiado"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_medico_form" model="ir.ui.view">
+            <field name="name">hospital.medico.form</field>
+            <field name="model">hospital.medico</field>
+            <field name="arch" type="xml">
+                <form string="Médico">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="apellidos"/>
+                        </group>
+                        <group>
+                            <field name="numero_colegiado"/>
+                        </group>
+                        <notebook><!-- Esto nos permite mostrar los estudiantes debajo en una pestaña-->
+                            <page string="Citas">
+                                <field name="citas_ids">
+                                    <tree string="Citas">
+                                        <field name="paciente_id"/>
+                                        <field name="diagnostico"/>
+                                    </tree>
+                                    <form string="Cita">
+                                        <sheet>
+                                            <group>
+                                                <field name="paciente_id"/>
+                                                <field name="diagnostico"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
+```
+
+</details>
+<br></br>
+
+**View Citas:**
+
+<details><summary>🔍 SPOILER:</summary>  
+
+```bash
+<odoo>
+    <data>
+        <!-- Vistas para Citas -->
+        <record id="view_citas_tree" model="ir.ui.view">
+            <field name="name">hospital.citas.tree</field>
+            <field name="model">hospital.citas</field>
+            <field name="arch" type="xml">
+                <tree string="Citas">
+                    <field name="paciente_id"/>
+                    <field name="medico_id"/>
+                    <field name="diagnostico"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_citas_form" model="ir.ui.view">
+            <field name="name">hospital.citas.form</field>
+            <field name="model">hospital.citas</field>
+            <field name="arch" type="xml">
+                <form string="Cita">
+                    <sheet>
+                        <group>
+                            <field name="paciente_id"/>
+                            <field name="medico_id"/>
+                        </group>
+                        <group>
+                            <field name="diagnostico"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
+```
+
+</details>
+<br></br>
+
+**Menus:**
+
+<details><summary>🔍 SPOILER:</summary>  
+
+```bash
+<odoo>
+    <data>
+        <!-- Acciones -->
+        <record id="action_pacientes" model="ir.actions.act_window">
+            <field name="name">Pacientes</field>
+            <field name="res_model">hospital.paciente</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="action_medicos" model="ir.actions.act_window">
+            <field name="name">Médicos</field>
+            <field name="res_model">hospital.medico</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="action_citas" model="ir.actions.act_window">
+            <field name="name">Citas</field>
+            <field name="res_model">hospital.citas</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Menú -->
+        <menuitem id="hospital_menu" name="Hospital"/>
+        <menuitem id="menu_hospital_pacientes" name="Pacientes" parent="hospital_menu" action="action_pacientes"/>
+        <menuitem id="menu_hospital_medicos" name="Médicos" parent="hospital_menu" action="action_medicos"/>
+        <menuitem id="menu_hospital_citas" name="Citas" parent="hospital_menu" action="action_citas"/>
+    </data>
+</odoo>
+```
+
+</details>
+
+
 
 
 <br></br>
 [Volver al inicio](#índice) 
 
-## 5) Views
-
-
-<br></br>
-[Volver al inicio](#índice) 
-
-## 6)  
+## 6)  Demo data
 
 
 <br></br>
