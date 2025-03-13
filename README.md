@@ -129,6 +129,7 @@ class Paciente(models.Model):
     apellidos = fields.Char(string="Apellidos", required=True)
     sintomas = fields.Text(string='Síntomas')
     citas_ids = fields.One2many('hospital.citas', 'paciente_id', string='Citas')
+    foto = fields.Image(max_width=100,max_height=100)
 
 class Medico(models.Model):
     _name = 'hospital.medico'
@@ -138,6 +139,7 @@ class Medico(models.Model):
     apellidos = fields.Char(string="Apellidos", required=True)
     numero_colegiado = fields.Integer(string="Número de Colegiado", required=True)
     citas_ids = fields.One2many('hospital.citas', 'medico_id', string='Citas')
+    foto = fields.Image(max_width=100,max_height=100)
 
 #Por cada vez que un médico ha atendido a un paciente, tendremos un modelo indicando el diagnóstico.
 #Un paciente puede haber sido atendido por varios médicos y un médico puede haber atendido a varios pacientes.
@@ -174,6 +176,7 @@ En este caso, debido a que el código era un poco extenso, he preferido separar 
                     <field name="name"/>
                     <field name="apellidos"/>
                     <field name="sintomas"/>
+                    <field name='foto' widget='image' options="{'size': [100, 100]}"/>
                 </tree>
             </field>
         </record>
@@ -189,6 +192,7 @@ En este caso, debido a que el código era un poco extenso, he preferido separar 
                             <field name="name"/>
                             <field name="apellidos"/>
                             <field name="sintomas"/>
+                            <field name='foto' widget='image' options="{'size': [100, 100]}"/>
                         </group>
                         <notebook><!-- Esto nos permite mostrar los estudiantes debajo en una pestaña-->
                             <page string="Citas">
@@ -227,6 +231,7 @@ En este caso, debido a que el código era un poco extenso, he preferido separar 
                     <field name="name"/>
                     <field name="apellidos"/>
                     <field name="numero_colegiado"/>
+                    <field name='foto' widget='image' options="{'size': [100, 100]}"/>
                 </tree>
             </field>
         </record>
@@ -241,6 +246,7 @@ En este caso, debido a que el código era un poco extenso, he preferido separar 
                             <field name="name"/>
                             <field name="apellidos"/>
                             <field name="numero_colegiado"/>
+                            <field name='foto' widget='image' options="{'size': [100, 100]}"/>
                         </group>
                         <notebook><!-- Esto nos permite mostrar los estudiantes debajo en una pestaña-->
                             <page string="Citas">
@@ -363,12 +369,17 @@ En este caso, debido a que el código era un poco extenso, he preferido separar 
       <field name="name">Mortadelo</field>
       <field name="apellidos">Mortadelez</field>
       <field name="sintomas">Cambia de apariencia en un parpadeo</field>
+      <field name="foto" file="hospital/static/fotos/mortadelo.png" type="base64"></field>
+
+      <!-- <field name="foto" file="hospital/static/fotos/mortadelo.jpg" type="base64"></field> -->
+
     </record>
 
     <record id="demo_paciente2" model="hospital.paciente">
       <field name="name">Filemon</field>
       <field name="apellidos">Filemonez</field>
       <field name="sintomas">Solo le quedan 2 pelos</field>
+      <field name="foto" file="hospital/static/fotos/filemon.png" type="base64"></field>
     </record>
 
     <!-- Datos de ejemplo para Médicos -->
@@ -376,12 +387,14 @@ En este caso, debido a que el código era un poco extenso, he preferido separar 
       <field name="name">House</field>
       <field name="apellidos">M.D.</field>
       <field name="numero_colegiado">10</field>
+      <field name="foto" file="hospital/static/fotos/house.png" type="base64"></field>
     </record>
 
     <record id="demo_medico2" model="hospital.medico">
       <field name="name">Vilches</field>
       <field name="apellidos">Hospital Central</field>
       <field name="numero_colegiado">6</field>
+      <field name="foto" file="hospital/static/fotos/vilches.png" type="base64"></field>
     </record>
 
     <!-- Datos de ejemplo para Citas -->
@@ -400,6 +413,7 @@ En este caso, debido a que el código era un poco extenso, he preferido separar 
 
     </data>
 </odoo>
+
 
 ```
 
