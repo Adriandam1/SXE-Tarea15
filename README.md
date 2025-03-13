@@ -3,10 +3,10 @@
 ## Índice  
 1. [Enunciado](#1-enunciado)  
 2. [Creación módulo]
-3. [3]
-4. [4]
-5. [5]
-6. [6]  
+3. [Manifest]
+4. [Model]
+5. [Views]
+6. [Demo data]  
 
 <br></br>
 ## 1) Enunciado  
